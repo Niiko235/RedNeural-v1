@@ -51,41 +51,18 @@ import numpy as np
 # ************ 
 # DISTRIBUCION EXPONENCIAL 
 # ************
-# def generar_datos_3d_3Nubes(numero_puntos=100):
-#     x1 = np.random.exponential(1, numero_puntos) + 2
-#     y1 = np.random.exponential(1, numero_puntos) + 2
-#     z1 = np.random.exponential(1, numero_puntos) + 2
-
-#     x2 = np.random.exponential(1, numero_puntos) + 10
-#     y2 = np.random.exponential(1, numero_puntos) + 10
-#     z2 = np.random.exponential(1, numero_puntos) + 10
-
-#     x3 = np.random.exponential(1, numero_puntos) + 2
-#     y3 = np.random.exponential(1, numero_puntos) + 8
-#     z3 = np.random.exponential(1, numero_puntos) + 8
-#     return x1,y1,z1,x2,y2,z2,x3,y3,z3, np.array(
-#         [[1, 0, 0]] * numero_puntos +
-#         [[0, 1, 0]] * numero_puntos +
-#         [[0, 0, 1]] * numero_puntos
-#     )
-
-
-# ************ 
-# DISTRIBUCION NORMAL SIN COVARIANZA  - NORMAL INDEPENDIENTE
-# ************
 def generar_datos_3d_3Nubes(numero_puntos=100):
-    x1 = np.random.normal(3, 1, numero_puntos)
-    y1 = np.random.normal(3, 1, numero_puntos)
-    z1 = np.random.normal(3, 1, numero_puntos)
+    x1 = np.random.exponential(1, numero_puntos) + 2
+    y1 = np.random.exponential(1, numero_puntos) + 2
+    z1 = np.random.exponential(1, numero_puntos) + 2
 
-    x2 = np.random.normal(9, 1, numero_puntos)
-    y2 = np.random.normal(9, 1, numero_puntos)
-    z2 = np.random.normal(9, 1, numero_puntos)
+    x2 = np.random.exponential(1, numero_puntos) + 8
+    y2 = np.random.exponential(1, numero_puntos) + 8
+    z2 = np.random.exponential(1, numero_puntos) + 8
 
-    x3 = np.random.normal(3, 1, numero_puntos)
-    y3 = np.random.normal(9, 1, numero_puntos)
-    z3 = np.random.normal(9, 1, numero_puntos)
-
+    x3 = np.random.exponential(1, numero_puntos) + 2
+    y3 = np.random.exponential(1, numero_puntos) + 8
+    z3 = np.random.exponential(1, numero_puntos) + 8
     return x1,y1,z1,x2,y2,z2,x3,y3,z3, np.array(
         [[1, 0, 0]] * numero_puntos +
         [[0, 1, 0]] * numero_puntos +
@@ -93,9 +70,32 @@ def generar_datos_3d_3Nubes(numero_puntos=100):
     )
 
 
+# ************ 
+# DISTRIBUCION NORMAL SIN COVARIANZA  - NORMAL INDEPENDIENTE
+# ************
+# def generar_datos_3d_3Nubes(numero_puntos=100):
+#     x1 = np.random.normal(3, 1, numero_puntos)
+#     y1 = np.random.normal(3, 1, numero_puntos)
+#     z1 = np.random.normal(3, 1, numero_puntos)
+
+#     x2 = np.random.normal(9, 1, numero_puntos)
+#     y2 = np.random.normal(9, 1, numero_puntos)
+#     z2 = np.random.normal(9, 1, numero_puntos)
+
+#     x3 = np.random.normal(3, 1, numero_puntos)
+#     y3 = np.random.normal(9, 1, numero_puntos)
+#     z3 = np.random.normal(9, 1, numero_puntos)
+
+#     return x1,y1,z1,x2,y2,z2,x3,y3,z3, np.array(
+#         [[1, 0, 0]] * numero_puntos +
+#         [[0, 1, 0]] * numero_puntos +
+#         [[0, 0, 1]] * numero_puntos
+#     )
 
 
-# def generar_datos_3d_3Nubes_binomial(numero_puntos=100):
+
+
+# def generar_datos_3d_3Nubes(numero_puntos=100):
 #     n, p = 10, 0.5  # parámetros de la binomial
 
 #     x1 = np.random.binomial(n, p, numero_puntos)

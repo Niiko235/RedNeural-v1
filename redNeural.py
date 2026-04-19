@@ -19,7 +19,7 @@ def error_cuadratico(y_pred, y_real):
 # ── Red neuronal ───────────────────────────────────────────────────────────────
 
 def redNeural(entradas, valor_esperado, epocas, taza_aprendizaje,
-              numero_neuronas_capa_oculta=5, tolerancia=0.001):
+              numero_neuronas_capa_oculta=5, tolerancia=0.001, callback=None):
     """
     Entrena una red neuronal de una capa oculta para clasificar 3 clases.
 
@@ -47,7 +47,7 @@ def redNeural(entradas, valor_esperado, epocas, taza_aprendizaje,
     print("=== Pesos iniciales ===")
     print("W1 (entrada→oculta):\n", W1)
     print("W2 (oculta→salida):\n",  W2)
-    print(f"\nTolerancia configurada: {tolerancia}")
+    print(f"\nTolerancia configurada: {tolerancia}%")
     print(f"Máximo de épocas:       {epocas}\n")
 
     # ── Bucle de entrenamiento ─────────────────────────────────────────────────
@@ -90,16 +90,22 @@ def redNeural(entradas, valor_esperado, epocas, taza_aprendizaje,
             b1 += taza_aprendizaje * delta_oculta
 
         # ── Reporte cada 100 épocas ───────────────────────────────────────────
-        if (epoca + 1) % 100 == 0:
+        if (epoca + 1) % 1 == 0:
             print(f"Época {epoca + 1:4d} | Error total: {error_total:.6f}")
+
+        # ── Actualizar gráficas en tiempo real (si se pasó un callback) ───────
+        # El callback recibe la época actual, el error y los pesos para graficarlos
+        if callback is not None:
+            callback(epoca + 1, error_total, W1, W2, b1, b2)
 
         # ── Parada anticipada por tolerancia ──────────────────────────────────
         # Si el error acumulado de los 300 puntos es menor que la tolerancia,
         # la red ya aprendió suficientemente bien → no tiene sentido seguir
-        if error_total < tolerancia:
+        error_total /= len(entradas)  # promedio de error por punto
+        if error_total < tolerancia / 100:
             print(f"\n✓ Tolerancia alcanzada en época {epoca + 1}"
                   f" — Error total: {error_total:.6f}"
-                  f" < Tolerancia: {tolerancia}")
+                  f" < Tolerancia: {tolerancia}%")
             break
 
     print("\n=== Pesos finales ===")
@@ -109,50 +115,3 @@ def redNeural(entradas, valor_esperado, epocas, taza_aprendizaje,
     return W1, W2, b1, b2
 
 
-# ── Predicción de un solo punto ────────────────────────────────────────────────
-
-def predecir(entrada, W1, W2, b1, b2):
-    x = np.array(entrada).reshape(1, -1)
-
-    # Forward pass del punto a predecir
-    h      = sigmoid(np.dot(x, W1) + b1)
-    y_pred = sigmoid(np.dot(h, W2) + b2)
-
-    print("Probabilidades por clase:", y_pred)
-
-    # La clase predicha es la neurona con mayor probabilidad
-    resultado = np.argmax(y_pred[0])
-    nombres   = {0: 'Grupo azul', 1: 'Grupo verde', 2: 'Grupo rojo'}
-    return nombres.get(resultado, 'No se pudo predecir')
-
-
-# ── Evaluación con matriz de confusión ─────────────────────────────────────────
-
-def matriz_confusion(entradas, valor_esperado, W1, W2, b1, b2):
-    """
-    Compara la clase real vs la clase predicha para cada punto.
-    La diagonal de la matriz son los aciertos; fuera de la diagonal, los errores.
-    """
-    n_clases = 3
-    confusion = np.zeros((n_clases, n_clases), dtype=int)
-
-    for i in range(len(entradas)):
-        # Forward pass para obtener la predicción
-        h      = sigmoid(np.dot(entradas[i].reshape(1, -1), W1) + b1)
-        y_pred = sigmoid(np.dot(h, W2) + b2)
-
-        pred = np.argmax(y_pred)           # clase que predijo la red
-        real = np.argmax(valor_esperado[i]) # clase real del punto
-
-        confusion[real][pred] += 1   # fila = real, columna = predicho
-
-    precision = np.trace(confusion) / np.sum(confusion)
-
-    print("\n=== Matriz de Confusión ===")
-    print("             Pred_Azul  Pred_Verde  Pred_Rojo")
-    nombres_filas = ["Real_Azul  ", "Real_Verde ", "Real_Rojo  "]
-    for i, fila in enumerate(confusion):
-        print(f"  {nombres_filas[i]}  {fila}")
-    print(f"\n  Precisión: {precision * 100:.2f}%")
-
-    return confusion, precision
