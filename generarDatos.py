@@ -48,8 +48,32 @@ import numpy as np
 #            np.array([0]*numero_puntos + [1]*numero_puntos + [0]*numero_puntos)
 
 
-# ************ 
-# DISTRIBUCION EXPONENCIAL 
+# ************
+# 2 CLASES — 3 ENTRADAS (distribución exponencial)
+# ************
+def generar_datos_3d_2Nubes(numero_puntos=100):
+    """
+    Genera dos nubes de puntos en 3D con distribución normal sin covarianza.
+    Nube 1: media (3,3,3), std=1  → clase [1,0]
+    Nube 2: media (9,9,9), std=1  → clase [0,1]
+    """
+    x1 = np.random.normal(3, 1, numero_puntos)
+    y1 = np.random.normal(3, 1, numero_puntos)
+    z1 = np.random.normal(3, 1, numero_puntos)
+
+    x2 = np.random.normal(9, 1, numero_puntos)
+    y2 = np.random.normal(9, 1, numero_puntos)
+    z2 = np.random.normal(9, 1, numero_puntos)
+
+    valor_esperado = np.array(
+        [[1, 0]] * numero_puntos +
+        [[0, 1]] * numero_puntos
+    )
+    return x1, y1, z1, x2, y2, z2, valor_esperado
+
+
+# ************
+# DISTRIBUCION EXPONENCIAL
 # ************
 def generar_datos_3d_3Nubes(numero_puntos=100):
     x1 = np.random.exponential(1, numero_puntos) + 2

@@ -19,7 +19,7 @@ def error_cuadratico(y_pred, y_real):
 # ── Red neuronal ───────────────────────────────────────────────────────────────
 
 def redNeural(entradas, valor_esperado, epocas, taza_aprendizaje,
-              numero_neuronas_capa_oculta=5, tolerancia=0.001, callback=None):
+              numero_neuronas_capa_oculta=5, tolerancia=0.001, numero_clases=3, callback=None):
     """
     Entrena una red neuronal de una capa oculta para clasificar 3 clases.
 
@@ -39,10 +39,10 @@ def redNeural(entradas, valor_esperado, epocas, taza_aprendizaje,
 
     # ── Pesos iniciales aleatorios pequeños ───────────────────────────────────
     # Se multiplican por 0.1 para que sigmoid no sature desde el inicio
-    W1 = np.random.rand(3, numero_neuronas_capa_oculta) * 0.1   # entrada → oculta
-    W2 = np.random.rand(numero_neuronas_capa_oculta, 3) * 0.1   # oculta  → salida
-    b1 = np.zeros((1, numero_neuronas_capa_oculta))              # bias capa oculta
-    b2 = np.zeros((1, 3))                                        # bias capa salida
+    W1 = np.random.rand(3, numero_neuronas_capa_oculta) * 0.1          # entrada → oculta
+    W2 = np.random.rand(numero_neuronas_capa_oculta, numero_clases) * 0.1  # oculta → salida
+    b1 = np.zeros((1, numero_neuronas_capa_oculta))                    # bias capa oculta
+    b2 = np.zeros((1, numero_clases))                                  # bias capa salida
 
     print("=== Pesos iniciales ===")
     print("W1 (entrada→oculta):\n", W1)

@@ -98,6 +98,75 @@ def export_pesos_individuales_unity(epocas_hist, hist_W1, hist_W2, hist_b1, hist
     print(f"✓ Pesos individuales exportados: W1({n_W1}) W2({n_W2}) b1({n_b1}) b2({n_b2}) por época.")
 
 
+CARPETA_2CLASES = './datosExportados2Clases'
+
+
+def export_para_unity_2clases(entradas, valor_esperado, W1, W2, b1, b2):
+    """
+    Exporta los datos de la red de 2 clases para Unity.
+      puntos.csv → x, y, z, clase (0 o 1)
+      W1.csv, W2.csv, b1.csv, b2.csv → pesos entrenados
+    """
+    import os
+    os.makedirs(CARPETA_2CLASES, exist_ok=True)
+
+    clases = np.argmax(valor_esperado, axis=1)
+    puntos = np.column_stack((entradas, clases))
+    np.savetxt(f'{CARPETA_2CLASES}/puntos.csv', puntos,
+               delimiter=',', header='x,y,z,clase', comments='',
+               fmt=['%.6f', '%.6f', '%.6f', '%d'])
+
+    np.savetxt(f'{CARPETA_2CLASES}/W1.csv', W1, delimiter=',', fmt='%.8f')
+    np.savetxt(f'{CARPETA_2CLASES}/W2.csv', W2, delimiter=',', fmt='%.8f')
+    np.savetxt(f'{CARPETA_2CLASES}/b1.csv', b1, delimiter=',', fmt='%.8f')
+    np.savetxt(f'{CARPETA_2CLASES}/b2.csv', b2, delimiter=',', fmt='%.8f')
+
+    print(f"✓ Datos 2 clases exportados para Unity en {CARPETA_2CLASES}/")
+
+
+def export_historial_unity_2clases(epocas_hist, errores_hist, norma_W1_hist, norma_W2_hist):
+    """
+    Exporta el historial de entrenamiento (2 clases) para Unity.
+    Columnas: epoca, error, norma_W1, norma_W2
+    """
+    import os
+    os.makedirs(CARPETA_2CLASES, exist_ok=True)
+
+    data = np.column_stack((epocas_hist, errores_hist, norma_W1_hist, norma_W2_hist))
+    np.savetxt(f'{CARPETA_2CLASES}/historial.csv', data,
+               delimiter=',', header='epoca,error,norma_W1,norma_W2',
+               comments='', fmt='%.6f')
+    print("✓ Historial 2 clases exportado para Unity.")
+
+
+def export_pesos_individuales_unity_2clases(epocas_hist, hist_W1, hist_W2, hist_b1, hist_b2):
+    """
+    Exporta cada peso y bias por época (2 clases) para Unity.
+    Columnas: epoca, w1_0, w1_1, ..., w2_0, ..., b1_0, ..., b2_0, ...
+    """
+    import os
+    os.makedirs(CARPETA_2CLASES, exist_ok=True)
+
+    arr_W1 = np.array(hist_W1)
+    arr_W2 = np.array(hist_W2)
+    arr_b1 = np.array(hist_b1)
+    arr_b2 = np.array(hist_b2)
+
+    n_W1, n_W2 = arr_W1.shape[1], arr_W2.shape[1]
+    n_b1, n_b2 = arr_b1.shape[1], arr_b2.shape[1]
+
+    headers = (['epoca']
+               + [f'w1_{i}' for i in range(n_W1)]
+               + [f'w2_{i}' for i in range(n_W2)]
+               + [f'b1_{i}' for i in range(n_b1)]
+               + [f'b2_{i}' for i in range(n_b2)])
+
+    data = np.column_stack((epocas_hist, arr_W1, arr_W2, arr_b1, arr_b2))
+    np.savetxt(f'{CARPETA_2CLASES}/pesos_historial.csv', data,
+               delimiter=',', header=','.join(headers), comments='', fmt='%.6f')
+    print(f"✓ Pesos 2 clases exportados: W1({n_W1}) W2({n_W2}) b1({n_b1}) b2({n_b2}) por época.")
+
+
 def export_epocas_3nubes_3d(error, pesos, bias, nombre):
     """
     Exporta el historial de entrenamiento (error, pesos y bias por época) a CSV.
